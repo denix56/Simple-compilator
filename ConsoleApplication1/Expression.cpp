@@ -59,15 +59,15 @@ string Expression::convertToPostfix()
 	unsigned i = 0;
 	while (i < infix.length())
 	{
-		if (isNumber(infix[i])) //число
+		if (isNumber(infix[i]) || infix[i] >= 'a' && infix[i] <= 'z') //число
 		{
 			if (i && infix[i - 1] == ' ')
 				postfix += " ";
 			postfix += infix[i];
 		}
-		else 
-			if (infix[i] == '(') //левая скобка
-				express.push('(');
+		else
+				if (infix[i] == '(') //левая скобка
+					express.push('(');
 			else
 				if (isPropOperation(infix[i])) //оператор
 				{
@@ -104,7 +104,9 @@ string Expression::convertToPostfix()
 					}
 					else
 						if (infix[i] != ' ') //всё остальное
-							return "Invalid expression: unk symb";			
+						{
+							return "Invalid expression: unk symb";
+						}
 		i++;
 	}
 	return postfix;
@@ -112,12 +114,12 @@ string Expression::convertToPostfix()
 
 
 
-int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N], int &order, int &varOrder, int &memOrder)
+int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N], int flags[N], int &order, int &varOrder, int &memOrder)
 {
 	const string postfix = convertToPostfix();
+	
 	if (postfix == "Invalid expression")
 	{
-		cerr << postfix << endl;
 		return 0;
 	}
 	unsigned i = 0;
@@ -131,14 +133,16 @@ int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N]
 			if (varAdr == -1)
 			{
 				if (varOrder == memOrder)
+				{
 					throw 4;
+				}
 				symbolTable[order] = tableEntry(postfix[i], 'V', varOrder);
 				varOrder--;
 				numbers.push(0);
 			}
 			else
 			{
-				numbers.push(SML[symbolTable[varAdr].getLoc()]);
+				numbers.push(symbolTable[varAdr].getLoc());
 			}
 		}
 		else
@@ -164,70 +168,75 @@ int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N]
 					int x, y;
 					numbers.pop(x);
 					numbers.pop(y);
-					numbers.push(calculate(y, x, postfix[i],symbolTable,SML,varOrder,memOrder));
+					numbers.push(calculate(y, x, postfix[i],symbolTable,SML, flags,varOrder,memOrder));
 				}
 			}
 			i++;
 		}
-
 	int res;
 	numbers.pop(res);
 	return res;
 }
 
-int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], int &varOrder, int &memOrder)
+int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], int flags[N], int &varOrder, int &memOrder)
 {
 	//добавлять функцией
-	SML[memOrder++] = LOAD * (int)pow(10, 1+floor(log10(a))) + a;
 	switch (op)
 	{
 	case '+':
-		SML[memOrder++] = ADD * (int)pow(10, 1+floor(log10(b))) + b;
-		SML[memOrder++] = STORE * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = ADD * 100 + b;
+		SML[memOrder++] = STORE * 100 + varOrder;
 		return varOrder;
 	case '-':
-		SML[memOrder++] = SUBSTRACT * (int)pow(10, 1+floor(log10(b))) + b;
-		SML[memOrder++] = STORE * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = SUBSTRACT + b;
+		SML[memOrder++] = STORE * 100 + varOrder;
 		return varOrder;
 	case '*':
-		SML[memOrder++] = MULTIPLY * (int)pow(10, 1+floor(log10(b))) + b;
-		SML[memOrder++] = STORE * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = MULTIPLY * 100 + b;
+		SML[memOrder++] = STORE * 100 + varOrder;
 		return varOrder;
 	case '/':
 		if (b == 0)
 		{
-			cerr << "Divide by 0" << endl;
 			throw 5;
 		}
-		SML[memOrder++] = DIVIDE * (int)pow(10, 1+floor(log10(b))) + b;
-		SML[memOrder++] = STORE * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = DIVIDE * 100 + b;
+		SML[memOrder++] = STORE * 100 + varOrder;
 		return varOrder;
 	case '%':
 		if (b == 0)
 		{
-			cerr << "Divide by 0" << endl;
 			return 0;
 		}
-		SML[memOrder++] = DIVIDE * (int)pow(10, 1+floor(log10(b))) + b;
-		SML[memOrder++] = MULTIPLY * (int)pow(10, 1+floor(log10(b))) + b;
-		SML[memOrder++] = STORE * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
-		SML[memOrder++] = LOAD * (int)pow(10, 1+floor(log10(a))) + a;
-		SML[memOrder++] = SUBSTRACT * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
-		SML[memOrder++] = STORE * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = DIVIDE * 100 + b;
+		SML[memOrder++] = MULTIPLY * 100 + b;
+		SML[memOrder++] = STORE * 100 + varOrder;
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = SUBSTRACT * 100 + varOrder;
+		SML[memOrder++] = STORE * 100 + varOrder;
 		return varOrder;
 	case '^':
-		SML[varOrder--] = 1;
-		SML[memOrder++] = LOAD * (int)pow(10, 1+floor(log10(b))) + b;
-		SML[memOrder++] = STORE * (int)pow(10, 1+floor(log10(varOrder))) + varOrder;
 		varOrder--;
-		SML[memOrder++] = LOAD * (int)pow(10, 1 + floor(log10(a))) + a;
-		SML[memOrder++] = BRANCHZERO * (int)pow(10, 1 + floor(log10(10))); // 2 проход
-		SML[memOrder++] = MULTIPLY * (int)pow(10, 1+floor(log10(a))) + a;
-		SML[memOrder++] = STORE * (int)pow(10, 1 + floor(log10(varOrder))) + varOrder;
-		SML[memOrder++] = LOAD * (int)pow(10, 1 + floor(log10(varOrder + 1))) + varOrder + 1;
-		SML[memOrder++] = SUBSTRACT * (int)pow(10, 1 + floor(log10(varOrder + 2))) + varOrder + 2;
-		SML[memOrder++] = STORE * (int)pow(10, 1 + floor(log10(varOrder + 1))) + varOrder + 1;
-		SML[memOrder++] = BRANCH * (int)pow(10, 1 + floor(log10(memOrder - 6))) + memOrder - 6;
+		SML[varOrder--] = 1;
+		SML[memOrder++] = LOAD * 100 + b;
+		SML[memOrder++] = SUBSTRACT * 100 + varOrder + 1;
+		SML[memOrder++] = STORE * 100 + varOrder;
+		varOrder--;
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = STORE * 100 + varOrder;
+		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 8; // 2 проход
+		SML[memOrder++] = LOAD * 100 + varOrder;
+		SML[memOrder++] = MULTIPLY * 100 + a;
+		SML[memOrder++] = STORE * 100 + varOrder;
+		SML[memOrder++] = LOAD * 100 + varOrder + 1;
+		SML[memOrder++] = SUBSTRACT * 100 + varOrder + 2;
+		SML[memOrder++] = STORE * 100 + varOrder + 1;
+		SML[memOrder++] = BRANCH * 100 + memOrder - 7;
 		return varOrder;
 	default:
 		cerr << "Unrecognized operator" << endl;

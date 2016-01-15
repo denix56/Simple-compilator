@@ -18,9 +18,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Queue.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="Expression.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>

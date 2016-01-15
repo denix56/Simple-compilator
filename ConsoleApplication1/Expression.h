@@ -27,10 +27,10 @@ public:
 	Expression(string ex);
 	~Expression();
 	string convertToPostfix();
-	int evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N], int &order, int &varOrder, int &memOrder);
+	int evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N], int flags[N], int &order, int &varOrder, int &memOrder);
 private:
 	bool isPropOperation(char c, char comp = '+') const;
-	int calculate(int a, int b, char op, tableEntry t[N], long SML[N], int &varOrder, int &memOrder);
+	int calculate(int a, int b, char op, tableEntry t[N], long SML[N], int flags[N], int &varOrder, int &memOrder);
 	inline bool isNumber(char c) const
 	{
 		return c >= '0' && c <= '9';

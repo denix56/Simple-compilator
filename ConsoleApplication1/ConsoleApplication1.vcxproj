@@ -156,7 +156,6 @@
     <ClInclude Include="Str_Switch.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="ListNode.h" />
-    <ClInclude Include="Queue.h" />
     <ClInclude Include="tableEntry.h" />
   </ItemGroup>
   <ItemGroup>
