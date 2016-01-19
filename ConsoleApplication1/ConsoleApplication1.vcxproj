@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ConsoleApplication1</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
-    <ProjectName>Compilator</ProjectName>
+    <ProjectName>simplec</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -31,6 +31,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -38,6 +39,7 @@
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -151,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Expression.h" />
+    <ClInclude Include="Comp.h" />
     <ClInclude Include="QueueStr.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="Str_Switch.h" />
@@ -159,10 +162,14 @@
     <ClInclude Include="tableEntry.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Compilator.cpp" />
+    <ClCompile Include="Comp.cpp" />
+    <ClCompile Include="simplec.cpp" />
     <ClCompile Include="Expression.cpp" />
     <ClCompile Include="QueueStr.cpp" />
     <ClCompile Include="tableEntry.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,18 @@
+﻿Сборка начата 16.01.2016 12:55:17.
+     1>Проект "C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\ConsoleApplication34\ConsoleApplication34.vcxproj" в узле 2 (целевые объекты Build).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Release\) contains files shared from another project (ConsoleApplication34.vcxproj, Simulator.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /EHa /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /analyze- /errorReport:prompt /clr:nostdlib simple.cpp
+         simple.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /clr /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /EHa /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fp"Release\simple.pch" /Fa"Release\\" /Fo"Release\\" /Fd"Release\vc140.pdb" /analyze- /errorReport:prompt "C:\Users\Denis\AppData\Local\Temp\.NETFramework,Version=v4.0.AssemblyAttributes.cpp"
+         .NETFramework,Version=v4.0.AssemblyAttributes.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\Release\simple.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\Release\simple.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 /SAFESEH Release\simple.obj
+         "Release\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         LINK : указан параметр /LTCG, но не требуется создание кода; удалите /LTCG из командной строки компоновки для повышения производительности компоновщика
+         ConsoleApplication34.vcxproj -> C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\Release\simple.exe
+     1>Сборка проекта "C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\ConsoleApplication34\ConsoleApplication34.vcxproj" завершена (целевые объекты Build).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:01.34

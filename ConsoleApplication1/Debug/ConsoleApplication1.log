@@ -1,0 +1,20 @@
+﻿Сборка начата 19.01.2016 21:17:05.
+     1>Проект "C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\ConsoleApplication1\ConsoleApplication1.vcxproj" в узле 2 (целевые объекты Build).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Compilator.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /AI"C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral" /Zi /clr /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _CRT_SECURE_NO_WARNINGS /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /D _CRT_SECURE_NO_WARNINGS /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /TP /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\mscorlib.dll" /analyze- /errorReport:prompt /clr:nostdlib simplec.cpp
+         simplec.cpp
+     1>c:\users\denis\documents\visual studio 2015\projects\consoleapplication34\consoleapplication1\Str_Switch.h(47): warning C4267: аргумент: преобразование из "size_t" в "const s_s::uchar"; возможна потеря данных
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\Debug\simplec.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\Debug\simplec.pdb" /ASSEMBLYDEBUG /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /FIXED:NO /NXCOMPAT /MACHINE:X86 Debug\Comp.obj
+         Debug\simplec.obj
+         Debug\Expression.obj
+         Debug\QueueStr.obj
+         Debug\tableEntry.obj
+         "Debug\.NETFramework,Version=v4.0.AssemblyAttributes.obj"
+         ConsoleApplication1.vcxproj -> C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\Debug\simplec.exe
+     1>Сборка проекта "C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\ConsoleApplication1\ConsoleApplication1.vcxproj" завершена (целевые объекты Build).
+
+Сборка успешно завершена.
+
+Затраченное время: 00:00:01.40

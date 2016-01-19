@@ -11,7 +11,6 @@ using std::stoi;
 #include "Expression.h"
 
 
-
 int checkChar(char v, tableEntry t[N], char type, int order)
 {
 	for (int i = 0; i < order; i++)
@@ -129,20 +128,19 @@ int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N]
 	{
 		if (postfix[i] >= 'a' && postfix[i] <= 'z')
 		{
-			int varAdr = checkChar(postfix[i], symbolTable, 'V');
-			if (varAdr == -1)
+			int varTab = checkChar(postfix[i], symbolTable, 'V');
+			if (varTab == -1)
 			{
 				if (varOrder == memOrder)
 				{
 					throw 4;
 				}
-				symbolTable[order] = tableEntry(postfix[i], 'V', varOrder);
-				varOrder--;
+				symbolTable[order] = tableEntry(postfix[i], 'V', varOrder--);
 				numbers.push(0);
 			}
 			else
 			{
-				numbers.push(symbolTable[varAdr].getLoc());
+				numbers.push(symbolTable[varTab].getLoc());
 			}
 		}
 		else
@@ -159,8 +157,8 @@ int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N]
 						throw 4;
 					symbolTable[order] = tableEntry(stoi(value), 'C', varOrder);
 					SML[varOrder] = stoi(value);
-					varOrder--;
 					numbers.push(varOrder);
+					varOrder--;
 					value.clear();
 				}
 				if (isPropOperation(postfix[i]))
@@ -169,6 +167,7 @@ int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N]
 					numbers.pop(x);
 					numbers.pop(y);
 					numbers.push(calculate(y, x, postfix[i],symbolTable,SML, flags,varOrder,memOrder));
+					varOrder--;
 				}
 			}
 			i++;
@@ -221,15 +220,25 @@ int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], i
 		SML[memOrder++] = STORE * 100 + varOrder;
 		return varOrder;
 	case '^':
-		varOrder--;
+		//
 		SML[varOrder--] = 1;
 		SML[memOrder++] = LOAD * 100 + b;
+		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 3;//
+		SML[memOrder++] = BRANCHPOS * 100 + memOrder + 5;//
+		SML[memOrder++] = BRANCHNEG * 100 + memOrder + 18;//
+		
+		//если нулевая степень
+		SML[memOrder++] = LOAD * 100 + varOrder + 2;
+		SML[memOrder++] = STORE * 100 + varOrder + 1;
+		SML[memOrder++] = BRANCH * 100 + memOrder + 33;
+
+		//если положительная
 		SML[memOrder++] = SUBSTRACT * 100 + varOrder + 1;
 		SML[memOrder++] = STORE * 100 + varOrder;
-		varOrder--;
+		varOrder--;// для цикла
 		SML[memOrder++] = LOAD * 100 + a;
 		SML[memOrder++] = STORE * 100 + varOrder;
-		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 8; // 2 проход
+		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 8; //  проход
 		SML[memOrder++] = LOAD * 100 + varOrder;
 		SML[memOrder++] = MULTIPLY * 100 + a;
 		SML[memOrder++] = STORE * 100 + varOrder;
@@ -237,9 +246,39 @@ int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], i
 		SML[memOrder++] = SUBSTRACT * 100 + varOrder + 2;
 		SML[memOrder++] = STORE * 100 + varOrder + 1;
 		SML[memOrder++] = BRANCH * 100 + memOrder - 7;
+		SML[memOrder++] = LOAD * 100 + varOrder;
+		SML[memOrder++] = BRANCH * 100 + memOrder + 21;//переход к следующей команде
+
+		SML[memOrder++] = LOAD * 100 + a;//
+		SML[memOrder++] = BRANCHNEG * 100 + memOrder + 3;
+		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 3;
+		SML[memOrder++] = BRANCHPOS * 100 + memOrder + 3;//
+		SML[memOrder++] = SUBSTRACT * 100 + a;//
+		SML[memOrder++] = BRANCH * 100 + memOrder + 16;//
+		SML[memOrder++] = STORE * 100 + varOrder;// result
+		varOrder--;
+
+		SML[memOrder++] = STORE * 100 + varOrder;//div
+		varOrder--;
+
+		SML[varOrder--] = 2;
+		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 1;//цикл
+		SML[memOrder++] = LOAD * 100 + a;
+		SML[memOrder++] = DIVIDE * 100 + varOrder + 2;
+		SML[memOrder++] = ADD * 100 + varOrder + 2;
+		SML[memOrder++] = DIVIDE * 100 + varOrder + 1;
+		SML[memOrder++] = STORE * 100 + varOrder + 2;
+		SML[memOrder++] = SUBSTRACT * 100 + varOrder + 3;
+		SML[memOrder++] = BRANCHNEG * 100 + memOrder + 2;
+		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 4;
+		SML[memOrder++] = LOAD * 100 + varOrder + 2;
+		SML[memOrder++] = STORE * 100 + varOrder + 3;
+		SML[memOrder++] = BRANCH * 100 + memOrder - 11;//
+		varOrder += 3;
 		return varOrder;
 	default:
 		cerr << "Unrecognized operator" << endl;
+		throw std::exception("Unrecognized operator");
 		return 0;
 	}
 }

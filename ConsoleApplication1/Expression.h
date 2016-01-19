@@ -18,6 +18,7 @@ MULTIPLY = 33,
 BRANCH = 40,
 BRANCHNEG = 41,
 BRANCHZERO = 42,
+BRANCHPOS = 44,
 HALT = 43;
 
 class Expression
