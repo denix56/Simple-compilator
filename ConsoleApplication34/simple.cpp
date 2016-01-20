@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
 					endIt = true;
 					break;
 				default:
-					if (accumulator > 9999 || accumulator < -9999)
+					if (instructionRegister > 9999 || instructionRegister < -9999)
 						cout << "*** Переполнение аккумулятора ***" << endl
 						<< "*** Симплетрон аварийно завершил выполнение программы ***" << endl;
 					else

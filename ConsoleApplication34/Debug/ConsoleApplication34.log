@@ -1,4 +1,4 @@
-﻿Сборка начата 19.01.2016 21:17:25.
+﻿Сборка начата 20.01.2016 12:22:07.
      1>Проект "C:\Users\Denis\Documents\Visual Studio 2015\Projects\ConsoleApplication34\ConsoleApplication34\ConsoleApplication34.vcxproj" в узле 2 (целевые объекты Build).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (ConsoleApplication34.vcxproj, Simulator.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
@@ -12,4 +12,4 @@
 
 Сборка успешно завершена.
 
-Затраченное время: 00:00:01.09
+Затраченное время: 00:00:01.79

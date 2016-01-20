@@ -6,9 +6,10 @@ using std::cin;
 using std::system;
 using std::cerr;
 #include <string>
-using std::getline;
-using std::stoi;
+//using std::getline;
+//using std::stoi;
 #include "Expression.h"
+using namespace std;
 
 
 int checkChar(char v, tableEntry t[N], char type, int order)
@@ -115,8 +116,8 @@ string Expression::convertToPostfix()
 
 int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N], int flags[N], int &order, int &varOrder, int &memOrder)
 {
-	const string postfix = convertToPostfix();
-	
+	string postfix = convertToPostfix();
+	cout<< "postfix: " << postfix << endl;
 	if (postfix == "Invalid expression")
 	{
 		return 0;
@@ -163,10 +164,27 @@ int Expression::evaluatePostfixExpression(tableEntry symbolTable[N], long SML[N]
 				}
 				if (isPropOperation(postfix[i]))
 				{
-					int x, y;
-					numbers.pop(x);
-					numbers.pop(y);
-					numbers.push(calculate(y, x, postfix[i],symbolTable,SML, flags,varOrder,memOrder));
+					if (postfix[i] == '/' && postfix[i + 2] == '^')
+					{
+						int x, y, z;
+						numbers.pop(x);
+						numbers.pop(y);
+						numbers.pop(z);
+						cout << x << "	" << y << "	" << z << endl;
+						numbers.push(calculate(z, y, '^', symbolTable, SML, flags, varOrder, memOrder));
+						numbers.pop(z);
+						// \ - символ извлечения корня
+						varOrder--;
+						numbers.push(calculate(z, x, '\\', symbolTable, SML, flags, varOrder, memOrder));
+						postfix.erase(i + 1, 2);
+					}
+					else
+					{
+						int x, y;
+						numbers.pop(x);
+						numbers.pop(y);
+						numbers.push(calculate(y, x, postfix[i], symbolTable, SML, flags, varOrder, memOrder));
+					}
 					varOrder--;
 				}
 			}
@@ -224,20 +242,22 @@ int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], i
 		SML[varOrder--] = 1;
 		SML[memOrder++] = LOAD * 100 + b;
 		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 3;//
-		SML[memOrder++] = BRANCHPOS * 100 + memOrder + 5;//
-		SML[memOrder++] = BRANCHNEG * 100 + memOrder + 18;//
+		SML[memOrder++] = BRANCHPOS * 100 + memOrder + 4;//
+		//SML[memOrder++] = BRANCHNEG * 100 + memOrder + 18;//
 		
 		//если нулевая степень
 		SML[memOrder++] = LOAD * 100 + varOrder + 2;
 		SML[memOrder++] = STORE * 100 + varOrder + 1;
-		SML[memOrder++] = BRANCH * 100 + memOrder + 33;
+		SML[memOrder++] = BRANCH * 100 + memOrder + 14;
 
 		//если положительная
+		
 		SML[memOrder++] = SUBSTRACT * 100 + varOrder + 1;
 		SML[memOrder++] = STORE * 100 + varOrder;
 		varOrder--;// для цикла
 		SML[memOrder++] = LOAD * 100 + a;
 		SML[memOrder++] = STORE * 100 + varOrder;
+		SML[memOrder++] = LOAD * 100 + varOrder + 1;
 		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 8; //  проход
 		SML[memOrder++] = LOAD * 100 + varOrder;
 		SML[memOrder++] = MULTIPLY * 100 + a;
@@ -247,14 +267,16 @@ int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], i
 		SML[memOrder++] = STORE * 100 + varOrder + 1;
 		SML[memOrder++] = BRANCH * 100 + memOrder - 7;
 		SML[memOrder++] = LOAD * 100 + varOrder;
-		SML[memOrder++] = BRANCH * 100 + memOrder + 21;//переход к следующей команде
-
+		//SML[memOrder++] = BRANCH * 100 + memOrder + 21;//переход к следующей команде
+		return varOrder;
+		//корень
+	case '\\':
 		SML[memOrder++] = LOAD * 100 + a;//
 		SML[memOrder++] = BRANCHNEG * 100 + memOrder + 3;
 		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 3;
 		SML[memOrder++] = BRANCHPOS * 100 + memOrder + 3;//
 		SML[memOrder++] = SUBSTRACT * 100 + a;//
-		SML[memOrder++] = BRANCH * 100 + memOrder + 16;//
+		SML[memOrder++] = BRANCH * 100 + memOrder + 15;//
 		SML[memOrder++] = STORE * 100 + varOrder;// result
 		varOrder--;
 
@@ -262,7 +284,7 @@ int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], i
 		varOrder--;
 
 		SML[varOrder--] = 2;
-		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 1;//цикл
+		//SML[memOrder++] = BRANCHZERO * 100 + memOrder + 1;//цикл
 		SML[memOrder++] = LOAD * 100 + a;
 		SML[memOrder++] = DIVIDE * 100 + varOrder + 2;
 		SML[memOrder++] = ADD * 100 + varOrder + 2;
@@ -273,7 +295,7 @@ int Expression::calculate(int a, int b, char op, tableEntry t[N], long SML[N], i
 		SML[memOrder++] = BRANCHZERO * 100 + memOrder + 4;
 		SML[memOrder++] = LOAD * 100 + varOrder + 2;
 		SML[memOrder++] = STORE * 100 + varOrder + 3;
-		SML[memOrder++] = BRANCH * 100 + memOrder - 11;//
+		SML[memOrder++] = BRANCH * 100 + memOrder - 10;//
 		varOrder += 3;
 		return varOrder;
 	default:

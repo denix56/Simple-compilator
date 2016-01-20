@@ -5,7 +5,7 @@
 40 input b
 45 rem
 50 rem add
-60 let c = a ^ b
+60 let c = a ^ ( 1 / b )
 65 rem
 70 rem print
 80 print c
